@@ -3,6 +3,7 @@ package volki.soalab;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import volki.soalab.dto.DragonDto;
 
@@ -20,7 +21,7 @@ public class DragonController {
     }
 
     @GetMapping(produces = "application/xml")
-    public List<DragonDto> getDragons() {
-        return dragonService.getDragons();
+    public List<DragonDto> getDragons(@RequestParam List<String> filter) {
+        return dragonService.getDragons(filter);
     }
 }

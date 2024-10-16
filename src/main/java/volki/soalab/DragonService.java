@@ -19,7 +19,7 @@ public class DragonService {
         this.dragonConverter = dragonConverter;
     }
 
-    public List<DragonDto> getDragons() {
+    public List<DragonDto> getDragons(List<String> filter) {
         return ((List<Dragon>) dragonRepository.findAll())
                 .stream().map(dragonConverter::toDragonDto)
                 .toList();
