@@ -1,19 +1,50 @@
 package volki.soalab.filters;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import volki.soalab.dto.DragonDto;
 
 @Component
 public class GenericFilter {
-    public <T extends Comparable<T>> boolean matches(T field, String operator, T value) {
+
+    private <T extends Comparable<T>> boolean genericMatcher(T a, String operator, T b) {
         return switch (operator) {
-            case "eq" -> field.equals(value);
-            case "nq" -> !field.equals(value);
-            case "gt" -> field.compareTo(value) > 0;
-            case "lt" -> field.compareTo(value) < 0;
-            case "ge" -> field.compareTo(value) >= 0;
-            case "le" -> field.compareTo(value) <= 0;
-            default -> throw new IllegalArgumentException("Unsupported operator: " + operator); //TODO вернуть exception
+            case "eq" -> a.equals(b);
+            case "nq" -> !a.equals(b);
+            case "gt" -> a.compareTo(b) > 0;
+            case "lt" -> a.compareTo(b) < 0;
+            case "ge" -> a.compareTo(b) >= 0;
+            case "le" -> a.compareTo(b) <= 0;
+            default -> throw new IllegalArgumentException("Unsupported operator: " + operator);
+        };
+    }
+
+
+    public boolean matches(DragonDto dragonDto, FilterAsString filterAsString) {
+
+        String field = filterAsString.getField();
+        String operator = filterAsString.getOperator();
+        String value = filterAsString.getValue();
+        return switch (field) {
+            case "id":
+                yield genericMatcher(
+                        dragonDto.getId(),
+                        operator,
+                        Long.parseLong(value)
+                );
+            case "name":
+                yield genericMatcher(
+                        dragonDto.getName(),
+                        operator,
+                        value
+                );
+            case "age":
+                yield genericMatcher(
+                        dragonDto.getAge(),
+                        operator,
+                        Long.parseLong(value)
+                );
+            default:
+                throw new IllegalArgumentException("Unsupported field: " + field);
         };
     }
 
