@@ -3,23 +3,25 @@ package volki.soalab.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import volki.soalab.dto.Dragon.DragonDto;
 
 import java.time.LocalDateTime;
 
 @Entity(name="dragon")
 @Data
-public class Dragon {
+@NoArgsConstructor
+public class DragonEntity {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
 
     @Column(name="name",nullable = false)
     private String name; //Поле не может быть null, Строка не может быть пустой
 
-    @OneToOne
-    @JoinColumn(name = "coordinates_id", nullable = false)
-    private Coordinates coordinates; //Поле не может быть null
+    @Embedded
+    private CoordinatesEntity coordinatesEntity; //Поле не может быть null
 
     @Column(name="creation_date", nullable = false, updatable = false)
     private java.time.LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
@@ -33,13 +35,22 @@ public class Dragon {
     @Column(name="speaking")
     private boolean speaking;
 
-    @ManyToOne
-    @JoinColumn(name = "color_id", nullable = false)
-    private Color color; //Поле не может быть null
+    @Embedded
+    private ColorEntity colorEntity; //Поле не может быть null
 
-    @ManyToOne
-    @JoinColumn(name = "dragon_head_id", nullable = false)
-    private DragonHead head;
+    @Embedded
+    private DragonHeadEntity head;
+
+    public DragonEntity(DragonDto dragonDto) {
+        this.name = dragonDto.getName();
+        this.coordinatesEntity = new CoordinatesEntity(dragonDto.getCoordinates());
+        this.creationDate = dragonDto.getCreationDate();
+        this.age = dragonDto.getAge();
+        this.wingspan = dragonDto.getWingspan();
+        this.speaking = dragonDto.isSpeaking();
+        this.colorEntity = new ColorEntity(dragonDto.getColor());
+        this.head = new DragonHeadEntity(dragonDto.getHead());
+    }
 
     @PrePersist
     public void prePersist() {

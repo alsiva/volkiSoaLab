@@ -1,9 +1,14 @@
 package volki.soalab;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import volki.soalab.dto.DragonDto;
-import volki.soalab.entities.Dragon;
+import volki.soalab.dto.ColorDto;
+import volki.soalab.dto.Dragon.DragonDto;
+import volki.soalab.dto.Dragon.DragonDtoWithId;
+import volki.soalab.dto.DragonCountDto;
+import volki.soalab.entities.DragonEntity;
 import volki.soalab.filters.FilterMachine;
 
 import java.util.List;
@@ -13,21 +18,66 @@ import java.util.List;
 public class DragonService {
 
     private final DragonRepository dragonRepository;
-    private final DragonConverter dragonConverter;
     private final FilterMachine filterMachine;
+
     @Autowired
-    public DragonService(DragonRepository dragonRepository, DragonConverter dragonConverter, FilterMachine filterMachine) {
+    public DragonService(DragonRepository dragonRepository, FilterMachine filterMachine) {
         this.dragonRepository = dragonRepository;
-        this.dragonConverter = dragonConverter;
         this.filterMachine = filterMachine;
     }
 
-    public List<DragonDto> getDragons(List<String> filter) {
-        List<DragonDto> dragonDtoList = ((List<Dragon>) dragonRepository.findAll())
-                .stream().map(dragonConverter::toDragonDto)
+    public List<DragonDtoWithId> getDragons(List<String> filter) {
+        List<DragonDtoWithId> dragonDtoWithIdList = ((List<DragonEntity>) dragonRepository.findAll())
+                .stream().map(DragonDtoWithId::new)
                 .toList();
 
-        return filterMachine.filter(dragonDtoList, filter);
+        return filterMachine.filter(dragonDtoWithIdList, filter);
     }
 
+    public DragonDtoWithId addDragon(DragonDto dragonDto) {
+        return new DragonDtoWithId(dragonRepository.save(new DragonEntity(dragonDto)));
+    }
+
+    public ResponseEntity<DragonDtoWithId> getDragonById(long id) {
+        return dragonRepository.findById(id)
+                .map(dragon -> new ResponseEntity<>(new DragonDtoWithId(dragon), HttpStatus.OK))  // Если дракон найден
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));  // Если дракон не найден
+
+    }
+
+    public ResponseEntity<DragonDtoWithId> deleteDragonById(long id) {
+        return dragonRepository.findById(id)
+                .map(dragon -> {
+                    DragonDtoWithId deletedDragon = new DragonDtoWithId(dragon);  // Создаем DTO удаленного дракона
+                    dragonRepository.deleteById(id);  // Удаляем дракона
+                    return new ResponseEntity<>(deletedDragon, HttpStatus.OK);  // Возвращаем удаленного дракона
+                })
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));  // Если дракон не найден
+
+    }
+
+    public DragonCountDto getDragonCountByEyesCount(long eyesCount) {
+        return new DragonCountDto(
+                ((List<DragonEntity>) dragonRepository.findAll())
+                        .stream().filter(dragonEntity -> dragonEntity.getHead().getEyesCount() == eyesCount)
+                        .count()
+        );
+    }
+
+    public DragonCountDto getDragonByColorGreaterThen(String color) {
+        return new DragonCountDto(
+                ((List<DragonEntity>) dragonRepository.findAll())
+                        .stream().map(DragonEntity::getColorEntity)
+                        .map(ColorDto::fromEntity)
+                        .filter(colorDto -> colorDto.compareTo(ColorDto.valueOf(color.toUpperCase())) >= 0)
+                        .count()
+        );
+    }
+
+    public List<DragonDtoWithId> getDragonsWhereNameContains(String substring) {
+        return ((List<DragonEntity>) dragonRepository.findAll())
+                        .stream().map(DragonDtoWithId::new)
+                        .filter(dragonDtoWithId -> dragonDtoWithId.getName().contains(substring))
+                        .toList();
+    }
 }

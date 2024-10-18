@@ -1,12 +1,17 @@
 package volki.soalab.filters;
 
 import org.springframework.stereotype.Component;
-import volki.soalab.dto.DragonDto;
+import volki.soalab.dto.Dragon.DragonDtoWithId;
 
 @Component
 public class GenericFilter {
 
     private <T extends Comparable<T>> boolean genericMatcher(T a, String operator, T b) {
+
+        if (a == null || b == null) {
+            return a != null;
+        }
+
         return switch (operator) {
             case "eq" -> a.equals(b);
             case "nq" -> !a.equals(b);
@@ -19,7 +24,7 @@ public class GenericFilter {
     }
 
 
-    public boolean matches(DragonDto dragonDto, FilterAsString filterAsString) {
+    public boolean matches(DragonDtoWithId dragonDtoWithId, FilterAsString filterAsString) {
 
         String field = filterAsString.getField();
         String operator = filterAsString.getOperator();
@@ -27,19 +32,19 @@ public class GenericFilter {
         return switch (field) {
             case "id":
                 yield genericMatcher(
-                        dragonDto.getId(),
+                        dragonDtoWithId.getId(),
                         operator,
                         Long.parseLong(value)
                 );
             case "name":
                 yield genericMatcher(
-                        dragonDto.getName(),
+                        dragonDtoWithId.getName(),
                         operator,
                         value
                 );
             case "age":
                 yield genericMatcher(
-                        dragonDto.getAge(),
+                        dragonDtoWithId.getAge(),
                         operator,
                         Long.parseLong(value)
                 );
