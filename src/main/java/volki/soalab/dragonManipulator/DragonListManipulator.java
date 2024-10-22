@@ -34,7 +34,7 @@ public class DragonListManipulator {
                 .collect(Collectors.toList());
     }
 
-    public List<DragonDtoWithId> page(List<DragonDtoWithId> dragonDtoWithIdList, String page) {
+    public List<DragonDtoWithId> page(List<DragonDtoWithId> dragonDtoWithIdList, Long page, Long pageSize) {
 
         if (page < 1 || pageSize < 1) {
             throw new IllegalParamException("Page number and size should be more than or equal 1");

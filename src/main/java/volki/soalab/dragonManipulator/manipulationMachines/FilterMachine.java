@@ -2,19 +2,19 @@ package volki.soalab.dragonManipulator.manipulationMachines;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import volki.soalab.dragonManipulator.mapper.ParamMapper;
 import volki.soalab.dragonManipulator.paramsStringRepresenation.FilterAsString;
 import volki.soalab.dragonManipulator.mapper.GenericComparablePair;
-import volki.soalab.dragonManipulator.mapper.ParamsMapper;
 import volki.soalab.dto.Dragon.DragonDtoWithId;
 import volki.soalab.exceptions.IllegalParamException;
 
 @Component
 public class FilterMachine {
 
-    private final ParamsMapper paramsMapper;
+    private final ParamMapper paramsMapper;
 
     @Autowired
-    public FilterMachine(ParamsMapper paramsMapper) {
+    public FilterMachine(ParamMapper paramsMapper) {
         this.paramsMapper = paramsMapper;
     }
 
@@ -40,12 +40,8 @@ public class FilterMachine {
 
 
     public boolean matches(DragonDtoWithId dragonDtoWithId, FilterAsString filterAsString) {
-
-        String field = filterAsString.getField();
         String operator = filterAsString.getOperator();
-        String value = filterAsString.getValue();
-
-        GenericComparablePair<?> genericFieldValue = paramsMapper.genericFieldValue(dragonDtoWithId, field, value);
+        GenericComparablePair<?> genericFieldValue = paramsMapper.FilterMapper(dragonDtoWithId, filterAsString);
         return genericMatcher(genericFieldValue, operator);
     }
 

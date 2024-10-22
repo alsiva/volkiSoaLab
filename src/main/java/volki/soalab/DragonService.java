@@ -10,6 +10,7 @@ import volki.soalab.dto.Dragon.DragonDtoWithId;
 import volki.soalab.dto.DragonCountDto;
 import volki.soalab.entities.DragonEntity;
 import volki.soalab.dragonManipulator.DragonListManipulator;
+import volki.soalab.exceptions.IllegalParamException;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class DragonService {
         this.dragonListManipulator = dragonListManipulator;
     }
 
-    public List<DragonDtoWithId> getDragons(List<String> filter, List<String> sort, List<String> page) {
+    public List<DragonDtoWithId> getDragons(List<String> filter, List<String> sort, Long page, Long pageSize) {
         List<DragonDtoWithId> dragonDtoWithIdList = ((List<DragonEntity>) dragonRepository.findAll())
                 .stream().map(DragonDtoWithId::new)
                 .toList();
@@ -39,8 +40,8 @@ public class DragonService {
             dragonDtoWithIdList = dragonListManipulator.sort(dragonDtoWithIdList, sort);
         }
 
-        if (page != null && !page.isEmpty()) {
-            dragonDtoWithIdList = dragonListManipulator.page(dragonDtoWithIdList, page);
+        if (page != null && pageSize != null) {
+            dragonDtoWithIdList = dragonListManipulator.page(dragonDtoWithIdList, page, pageSize);
         }
 
         return dragonDtoWithIdList;
@@ -77,11 +78,20 @@ public class DragonService {
     }
 
     public DragonCountDto getDragonByColorGreaterThen(String color) {
+        ColorDto colorToCompare;
+        try {
+            colorToCompare = ColorDto.valueOf(color.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalParamException(String.format(
+                    "Color (%s) doesn't exist", color.toUpperCase()
+            ));
+        }
+
         return new DragonCountDto(
                 ((List<DragonEntity>) dragonRepository.findAll())
                         .stream().map(DragonEntity::getColorEntity)
                         .map(ColorDto::fromEntity)
-                        .filter(colorDto -> colorDto.compareTo(ColorDto.valueOf(color.toUpperCase())) >= 0)
+                        .filter(colorDto -> colorDto.compareTo(colorToCompare) >= 0)
                         .count()
         );
     }
@@ -92,4 +102,6 @@ public class DragonService {
                         .filter(dragonDtoWithId -> dragonDtoWithId.getName().contains(substring))
                         .toList();
     }
+
+
 }

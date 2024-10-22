@@ -13,9 +13,8 @@ public class SortAsString {
 
 
     public SortAsString(String sortAsString) {
-        String sortRegex = "^-?[a-zA-Z_]+$";
+        String sortRegex = "(-)?([a-zA-Z]+)";
         Pattern pattern = Pattern.compile(sortRegex);
-
 
         Matcher matcher = pattern.matcher(sortAsString);
         if (!matcher.matches()) {

@@ -23,9 +23,18 @@ public class DragonController {
     }
 
     @GetMapping(produces = "application/xml")
-    public ResponseEntity<?> getDragons(@RequestParam(required = false) List<String> filter) {
+    public ResponseEntity<?> getDragons(
+            @RequestParam(required = false) List<String> filter,
+            @RequestParam(required = false) List<String> sort,
+            @RequestParam(required = false) Long page,
+            @RequestParam(required = false) Long pageSize) {
         try {
-            List<DragonDtoWithId> dragonDtoWithIdList = dragonService.getDragons(filter);
+            List<DragonDtoWithId> dragonDtoWithIdList = dragonService.getDragons(
+                    filter,
+                    sort,
+                    page,
+                    pageSize
+            );
             return ResponseEntity.ok(dragonDtoWithIdList);
         } catch (IllegalParamException e) {
             return ResponseEntity.badRequest().body(new ErrorDto(e.getMessage()));
@@ -54,7 +63,7 @@ public class DragonController {
     }
 
     @GetMapping(value = "/count/{color}", produces = "application/xml")
-    public ResponseEntity<DragonCountDto> countDragonsByEyes(@PathVariable String color) {
+    public ResponseEntity<DragonCountDto> countDragonsColor(@PathVariable String color) {
         DragonCountDto dragonCountDto = dragonService.getDragonByColorGreaterThen(color);
         return ResponseEntity.ok(dragonCountDto);
     }
