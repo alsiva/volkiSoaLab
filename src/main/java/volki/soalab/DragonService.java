@@ -9,7 +9,7 @@ import volki.soalab.dto.Dragon.DragonDto;
 import volki.soalab.dto.Dragon.DragonDtoWithId;
 import volki.soalab.dto.DragonCountDto;
 import volki.soalab.entities.DragonEntity;
-import volki.soalab.filters.FilterMachine;
+import volki.soalab.dragonManipulator.DragonListManipulator;
 
 import java.util.List;
 
@@ -18,20 +18,32 @@ import java.util.List;
 public class DragonService {
 
     private final DragonRepository dragonRepository;
-    private final FilterMachine filterMachine;
+    private final DragonListManipulator dragonListManipulator;
 
     @Autowired
-    public DragonService(DragonRepository dragonRepository, FilterMachine filterMachine) {
+    public DragonService(DragonRepository dragonRepository, DragonListManipulator dragonListManipulator) {
         this.dragonRepository = dragonRepository;
-        this.filterMachine = filterMachine;
+        this.dragonListManipulator = dragonListManipulator;
     }
 
-    public List<DragonDtoWithId> getDragons(List<String> filter) {
+    public List<DragonDtoWithId> getDragons(List<String> filter, List<String> sort, List<String> page) {
         List<DragonDtoWithId> dragonDtoWithIdList = ((List<DragonEntity>) dragonRepository.findAll())
                 .stream().map(DragonDtoWithId::new)
                 .toList();
 
-        return filterMachine.filter(dragonDtoWithIdList, filter);
+        if (filter != null && !filter.isEmpty()) {
+            dragonDtoWithIdList = dragonListManipulator.filter(dragonDtoWithIdList, filter);
+        }
+
+        if (sort != null && !sort.isEmpty()) {
+            dragonDtoWithIdList = dragonListManipulator.sort(dragonDtoWithIdList, sort);
+        }
+
+        if (page != null && !page.isEmpty()) {
+            dragonDtoWithIdList = dragonListManipulator.page(dragonDtoWithIdList, page);
+        }
+
+        return dragonDtoWithIdList;
     }
 
     public DragonDtoWithId addDragon(DragonDto dragonDto) {

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import volki.soalab.dto.Dragon.DragonDto;
 import volki.soalab.dto.Dragon.DragonDtoWithId;
 import volki.soalab.dto.DragonCountDto;
+import volki.soalab.dto.ErrorDto;
+import volki.soalab.exceptions.IllegalParamException;
 
 import java.util.List;
 
@@ -21,8 +23,13 @@ public class DragonController {
     }
 
     @GetMapping(produces = "application/xml")
-    public List<DragonDtoWithId> getDragons(@RequestParam List<String> filter) {
-        return dragonService.getDragons(filter);
+    public ResponseEntity<?> getDragons(@RequestParam(required = false) List<String> filter) {
+        try {
+            List<DragonDtoWithId> dragonDtoWithIdList = dragonService.getDragons(filter);
+            return ResponseEntity.ok(dragonDtoWithIdList);
+        } catch (IllegalParamException e) {
+            return ResponseEntity.badRequest().body(new ErrorDto(e.getMessage()));
+        }
     }
 
     @GetMapping(value = "/{id}", produces = "application/xml")

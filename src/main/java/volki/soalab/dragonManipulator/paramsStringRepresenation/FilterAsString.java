@@ -1,7 +1,9 @@
-package volki.soalab.filters;
+package volki.soalab.dragonManipulator.paramsStringRepresenation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import volki.soalab.exceptions.IllegalParamException;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +21,8 @@ public class FilterAsString {
 
         Matcher matcher = patter.matcher(filterAsString);
         if (!matcher.matches()) {
-            throw new IllegalArgumentException(
-                    String.format("Filter (%s) doesn't match", filterAsString)
+            throw new IllegalParamException(
+                    String.format("Filter (%s) doesn't match field-value-operator pattern", filterAsString)
             );
         }
         this.field = matcher.group(1);
