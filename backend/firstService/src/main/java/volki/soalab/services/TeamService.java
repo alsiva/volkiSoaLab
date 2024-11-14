@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import volki.soalab.dto.dragon.DragonDtoWithId;
 import volki.soalab.dto.hunter.HunterDtoWithId;
 import volki.soalab.dto.hunter.HunterDtoWithIdList;
 import volki.soalab.dto.team.TeamDto;
@@ -64,5 +65,26 @@ public class TeamService {
     public ResponseEntity<TeamDtoWithId> addTeam(TeamDto teamDto) {
         TeamEntity teamEntity = teamRepository.save(new TeamEntity(teamDto));
         return ResponseEntity.ok(new TeamDtoWithId(teamEntity));
+    }
+
+    public ResponseEntity<TeamDtoWithIdAndHunters> updateTeam(long id, TeamDto teamDto) {
+        Optional<TeamEntity> optionalTeamEntity = teamRepository.findById(id);
+        if (optionalTeamEntity.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        TeamEntity teamEntity = optionalTeamEntity.get();
+        teamEntity.updateByTeamDto(teamDto);
+        teamRepository.save(teamEntity);
+        return ResponseEntity.ok(new TeamDtoWithIdAndHunters(teamEntity));
+    }
+
+    public ResponseEntity<TeamDtoWithIdAndHunters> deleteTeam(long id) {
+        return teamRepository.findById(id)
+                .map(team -> {
+                    TeamDtoWithIdAndHunters deletedTeamDtoWithIdAndHunters = new TeamDtoWithIdAndHunters(team);  // Создаем DTO удаленного дракона
+                    teamRepository.deleteById(id);  // Удаляем дракона
+                    return new ResponseEntity<>(deletedTeamDtoWithIdAndHunters, HttpStatus.OK);  // Возвращаем удаленного дракона
+                })
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));  // Если дракон не найден
     }
 }

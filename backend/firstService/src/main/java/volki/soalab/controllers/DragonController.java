@@ -1,10 +1,10 @@
 package volki.soalab.controllers;
 
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import volki.soalab.dto.dragon.*;
 import volki.soalab.services.DragonService;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/dragons")
-
+@Validated
 public class DragonController {
 
     private final DragonService dragonService;
@@ -53,7 +53,7 @@ public class DragonController {
         return ResponseEntity.ok(new Alsiva(22L, "alsiva"));
     }
 
-    @PutMapping(value = "{id}", produces = "application/xml")
+    @PutMapping(value = "/{id}", produces = "application/xml")
     public ResponseEntity<DragonDtoWithId> updateDragonById(@PathVariable long id, @Valid @RequestBody DragonDto dragonDto) {
         return dragonService.updateDragonById(id, dragonDto);
     }

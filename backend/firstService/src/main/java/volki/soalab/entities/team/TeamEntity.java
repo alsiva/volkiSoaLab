@@ -34,4 +34,13 @@ public class TeamEntity {
         this.power = teamDto.getPower();
         this.hunterEntityList = new ArrayList<>();
     }
+
+    public void updateByTeamDto(TeamDto teamDto) {
+        if (teamDto.getName() != null) {
+            this.name = teamDto.getName();
+        }
+        if (teamDto.getPower() != null) {
+            this.power = teamDto.getPower();
+        }
+    }
 }

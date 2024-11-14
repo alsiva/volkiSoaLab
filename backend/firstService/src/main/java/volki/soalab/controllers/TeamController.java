@@ -1,11 +1,11 @@
 package volki.soalab.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.standard.processor.StandardEachTagProcessor;
 import volki.soalab.dto.team.TeamDto;
 import volki.soalab.dto.team.TeamDtoWithId;
 import volki.soalab.dto.team.TeamDtoWithIdAndHunters;
@@ -45,5 +45,15 @@ public class TeamController {
     @PostMapping(produces = "application/xml", consumes = "application/xml")
     public ResponseEntity<TeamDtoWithId> addTeam(@RequestBody @Valid TeamDto teamDto) {
         return teamService.addTeam(teamDto);
+    }
+
+    @PutMapping(value = "/{id}", produces = "application/xml", consumes = "application/xml")
+    public ResponseEntity<TeamDtoWithIdAndHunters> updateTeam(@PathVariable long id, @RequestBody @Valid TeamDto teamDto) {
+        return teamService.updateTeam(id, teamDto);
+    }
+
+    @DeleteMapping(value = "/{id}", produces = "application/xml", consumes = "application/xml")
+    public ResponseEntity<TeamDtoWithIdAndHunters> deleteTeam(@PathVariable long id) {
+        return teamService.deleteTeam(id);
     }
 }

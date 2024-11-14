@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import volki.soalab.entities.dragon.DragonEntity;
+import volki.soalab.entities.dungeon.DungeonEntity;
 
 @Getter
 @Setter
