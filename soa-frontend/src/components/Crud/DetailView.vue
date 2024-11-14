@@ -39,7 +39,7 @@
 
 <script setup>
 import { createFilterString } from '@/scripts/dto/dto';
-import { ref, watch } from 'vue';
+import { ref, watch, inject} from 'vue';
 
 
 const props = defineProps({
@@ -86,10 +86,13 @@ const resetState = () => {
   console.log(`CurEntity : ${JSON.stringify(props.curEntity)}`);
 }
 
+const entity = inject('entity');
+
 const applyFilters = () => {
   //emit('update', editableEntity.value);
   console.log(`Updated Entity: ${JSON.stringify(editableEntity.value)}`);
-  emit('update', editableEntity.value);
+  //emit('update', editableEntity.value);
+  entity.value.update(JSON.parse(JSON.stringify(editableEntity.value)));
   closeModal();
 
 }

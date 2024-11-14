@@ -38,4 +38,34 @@ function createDragonFromJsonObject(jsonObject){
     return parseJsonValues(newDragon);
 }
 
-export {Dragon, createDragonFromJsonObject};
+function prepareJsonDragonXmlConversion(jsonDragon){
+    const jsonDragonTemp = jsonDragon;
+    let cord_x = jsonDragonTemp.coordinate_x;
+    let cord_y = jsonDragonTemp.coordinate_y;
+    delete jsonDragonTemp.coordinate_x;
+    delete jsonDragonTemp.coordinate_y;
+    jsonDragonTemp['coordinates'] = {
+        x: cord_x,
+        y: cord_y
+    };
+
+    let eyes = jsonDragonTemp.eyes_count;
+    delete jsonDragonTemp.eyes_count;
+    jsonDragonTemp['head'] = {
+        eyesCount: eyes
+    };
+    return {dragon: jsonDragonTemp};
+    /*let jsonTemplate = {
+        dragon: {
+            name: jsonDragon.name,
+            coordinates: {
+                x: jsonDragon.coordinate_x,
+                y: jsonDragon.coordinate_y
+            },
+            age: jsonDragon.age,
+            wingspan: jsonDragon
+        }
+    }*/
+}
+
+export {Dragon, createDragonFromJsonObject, prepareJsonDragonXmlConversion};

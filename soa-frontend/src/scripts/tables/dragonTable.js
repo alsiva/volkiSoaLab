@@ -1,5 +1,5 @@
 import { RequestAllDto } from "../dto/dto";
-import { createDragonFromJsonObject } from "../entities/dragon";
+import { createDragonFromJsonObject, prepareJsonDragonXmlConversion } from "../entities/dragon";
 
 import { convertJsonToXml } from "../utils";
 
@@ -86,7 +86,7 @@ class DragonTable {
         let url = this.urlService.getFindByIdUrl("dragons", dragonJson.id);
         console.log(url);
         let data;
-        let dragonXml = convertJsonToXml(dragonJson);
+        let dragonXml = convertJsonToXml(prepareJsonDragonXmlConversion(dragonJson));
         data = await this.urlService.updateItem(url, dragonXml);
         console.log(`Data from Url Service ${JSON.stringify(data)}`);
         if(Object.keys(data).length == 0){

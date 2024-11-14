@@ -1,6 +1,4 @@
-import { j2xParser } from "simple-xml-to-json";
-
-
+import xmon from "xmon";
 // Функция получает на вход объект и node - raw json в неподходящем формате
 // Рекурсивно обходит этот json и заполняет поля obj
 function rawJsonParser(node, obj) {
@@ -22,9 +20,9 @@ async function updateTableData(entityData, entityColumns, entity, reqDto){
 }
 
 function convertJsonToXml(jsonObject) {
-    const parser = new j2xParser();
-    const xmlDataWithHeader = parser.parse(jsonObject);
-    console.log(`Parsed JSON Object: ${xmlDataWithHeader}`);
+    let xmlObject = xmon.jsonToXml(jsonObject);
+    console.log(`Parsed JSON Object: ${xmlObject}`);
+    return xmlObject;
 }
 
 export {rawJsonParser, updateTableData, convertJsonToXml};

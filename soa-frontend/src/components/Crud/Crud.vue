@@ -31,7 +31,7 @@ import PageInput from './PageInput.vue';
 import FiltersModal from './FiltersModal.vue';
 import SortModal from './SortModal.vue';
 
-import {ref, watch, onMounted} from "vue";
+import {ref, watch, onMounted, provide} from "vue";
 
 import { DragonTable } from '@/scripts/tables/dragonTable';
 import { urlService } from '@/main';
@@ -54,6 +54,10 @@ const fieldsToFilterTeams = ["id", "firstName", "lastName", "strength", "teamId"
 const fieldsToFilterHunters = ["id", "name", "power"];
 
 const fieldsToFilterCurState = ref(createFiltersFromArray(fieldsToFilterDragons));
+
+// Provided Values
+provide('entity', entity);
+
 
 onMounted(() => {
 

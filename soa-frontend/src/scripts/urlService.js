@@ -114,13 +114,15 @@ class UrlService{
     }
 
     async updateItem(url, xmlContent) {
+        console.log(`Xml Content to send: ${xmlContent}`)
         try {
             const response = await fetch(url, {
-            method: 'DELETE',
+            method: 'PUT',
             headers: {
-                'Content-Type': 'application/xml'
+                'Content-Type': 'application/xml',
+                'Accept': 'application/xml'
             },
-            body: xmlContent
+            body: xmlContent,
             });
             let data = await response.text();
 
