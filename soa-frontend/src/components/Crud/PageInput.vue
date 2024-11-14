@@ -1,8 +1,12 @@
 <template>
-    <input type="number" class="table__page-input" id="page-input" @input="input">
+    <input type="number" class="table__page-input" id="page-input" @input="input" :value="curPageNumber">
 </template>
 
 <script setup>
+
+import { ref } from 'vue';
+
+const curPageNumber = ref(0);
 
 const emit = defineEmits(
     ['pageNumber']
@@ -10,6 +14,7 @@ const emit = defineEmits(
 
 const input = (e) => {
     if(e.target.value != ""){
+        curPageNumber.value = parseInt(e.target.value);
         emit('pageNumber', parseInt(e.target.value));
     }
 }

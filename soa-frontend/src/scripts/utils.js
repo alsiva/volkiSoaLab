@@ -1,4 +1,4 @@
-
+import { j2xParser } from "simple-xml-to-json";
 
 
 // Функция получает на вход объект и node - raw json в неподходящем формате
@@ -21,4 +21,10 @@ async function updateTableData(entityData, entityColumns, entity, reqDto){
     entityColumns.value = Object.keys(data[0]);
 }
 
-export {rawJsonParser, updateTableData};
+function convertJsonToXml(jsonObject) {
+    const parser = new j2xParser();
+    const xmlDataWithHeader = parser.parse(jsonObject);
+    console.log(`Parsed JSON Object: ${xmlDataWithHeader}`);
+}
+
+export {rawJsonParser, updateTableData, convertJsonToXml};

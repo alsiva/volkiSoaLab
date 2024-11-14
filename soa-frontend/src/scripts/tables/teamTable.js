@@ -8,7 +8,7 @@ class TeamTable {
     }
 
     async getAll(requestDto){
-        let url = this.urlService.getAllUrl(requestDto.entityName, requestDto.sort, requestDto.filter, requestDto.page, requestDto.pageCount);
+        let url = this.urlService.getAllUrl(requestDto.entityName, requestDto.sort, requestDto.filters, requestDto.page, requestDto.pageCount);
         console.log(url);
         let data;
         data = await this.urlService.fetchXmlAsJson(url);

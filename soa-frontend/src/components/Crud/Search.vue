@@ -5,11 +5,19 @@
 </template>
 
 <script setup>
+
+const props = defineProps({
+    collection: String
+})
 const emit = defineEmits(
     ['search']
 );
 const search = (e) => {
-    emit('search', e.target.value);
+    if(props.collection == "dragons"){
+        emit('search', e.target.value);
+    }else {
+        alert("Поиск по подстроке можно выполнять только для коллекции Драконов")
+    }
 }
 
 </script>

@@ -1,18 +1,40 @@
 import { convertXML } from "simple-xml-to-json";
+import { rawJsonParser } from "./utils";
 
 class UrlService{
     base_url;
     constructor(base_url){
         this.base_url = base_url;
     }
-
-    getAllUrl(entityName, sorts=[], filters=[], page=1, pageCount=5){
-        let url = `${this.base_url}/${entityName}?page=${page}&pagesCount=${pageCount}`;
+    // sorts, filters - должны быть строками
+    getAllUrl(entityName, sorts, filters, page=1, pageCount=5){
+        let url = `${this.base_url}/${entityName}?page=${page}&pageSize=${pageCount}`;
+        if(filters != ""){
+            url += `&${filters}`;
+        }
+        if(sorts != ""){
+            url += `&${sorts}`;
+        }
         return url;
     }
 
     getFindBySubstringUrl(entityName, substring) {
         let url = `${this.base_url}/${entityName}/search/${substring}`;
+        return url;
+    }
+
+    getFindByIdUrl(entityName, id){
+        let url = `${this.base_url}/${entityName}/${id}`;
+        return url;
+    }
+
+    getDeleteUrl(entityName, id){
+        let url = `${this.base_url}/${entityName}/${id}`;
+        return url;
+    }
+
+    getUpdateUrl(entityName, id){
+        let url = `${this.base_url}/${entityName}/${id}`;
         return url;
     }
 
@@ -29,11 +51,16 @@ class UrlService{
     async fetchXmlAsJson(url) {
         try {
             // Выполняем GET-запрос
-            const response = await fetch(url);
+            const response = await fetch(encodeURI(url));
 
             // Проверяем, успешен ли запрос
             if (!response.ok) {
-                throw new Error(`Ошибка: ${response.status}`);
+                let error = {};
+                rawJsonParser(convertXML(await response.text()), error)
+                console.log(error);
+                //throw new Error(`Ошибка: ${response.status}`);
+                alert(`Ошибка!\nСтатус:${response.status}\nСообщение:${error.message}`);
+                return {};
             }
 
             // Получаем текст ответа (XML)
@@ -60,6 +87,59 @@ class UrlService{
             console.error('Ошибка при получении или обработке данных:', error);
         }
     }
+    async deleteItem(url) {
+        try {
+            const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            });
+            let data = await response.text();
+
+            if (response.ok) {
+            console.log('Элемент успешно удалён');
+            }        
+            if (!response.ok) {
+                let error = {};
+                rawJsonParser(convertXML(data), error)
+                console.log(error);
+                alert(`Ошибка!\nСтатус:${response.status}\nСообщение:${error.message}`);
+                return {};
+            }
+            return convertXML(data);
+        } catch (error) {
+            console.error('Произошла ошибка:', error);
+        }
+    }
+
+    async updateItem(url, xmlContent) {
+        try {
+            const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/xml'
+            },
+            body: xmlContent
+            });
+            let data = await response.text();
+
+            if (response.ok) {
+            console.log('Элемент успешно удалён');
+            }        
+            if (!response.ok) {
+                let error = {};
+                rawJsonParser(convertXML(data), error)
+                console.log(error);
+                alert(`Ошибка!\nСтатус:${response.status}\nСообщение:${error.message}`);
+                return {};
+            }
+            return convertXML(data);
+        } catch (error) {
+            console.error('Произошла ошибка:', error);
+        }
+    }
+
 }
 
 export {UrlService};
