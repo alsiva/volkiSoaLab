@@ -37,6 +37,14 @@ public class HunterEntity {
         this.teamEntity = null;
     }
 
+    public HunterEntity(HunterDtoWithId hunterDto) {
+        this.id = hunterDto.getId();
+        this.firstName = hunterDto.getFirstName();
+        this.lastName = hunterDto.getLastName();
+        this.strength = hunterDto.getStrength();
+        this.teamEntity = null;
+    }
+
     public HunterEntity(HunterDto hunterDto, TeamEntity teamEntity) {
         this.firstName = hunterDto.getFirstName();
         this.lastName = hunterDto.getLastName();

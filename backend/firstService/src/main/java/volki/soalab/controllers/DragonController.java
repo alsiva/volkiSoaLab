@@ -53,7 +53,7 @@ public class DragonController {
         return ResponseEntity.ok(new Alsiva(22L, "alsiva"));
     }
 
-    @PutMapping(value = "{id}", produces = "application/xml")
+    @PutMapping(value = "/{id}", produces = "application/xml")
     public ResponseEntity<DragonDtoWithId> updateDragonById(@PathVariable long id, @Valid @RequestBody DragonDto dragonDto) {
         return dragonService.updateDragonById(id, dragonDto);
     }

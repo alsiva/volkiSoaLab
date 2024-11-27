@@ -43,7 +43,7 @@ public class TeamController {
 
 
     @PostMapping(produces = "application/xml", consumes = "application/xml")
-    public ResponseEntity<TeamDtoWithId> addTeam(@RequestBody @Valid TeamDto teamDto) {
+    public ResponseEntity<TeamDtoWithId> addTeam(@RequestBody @Valid TeamDtoWithId teamDto) {
         return teamService.addTeam(teamDto);
     }
 }

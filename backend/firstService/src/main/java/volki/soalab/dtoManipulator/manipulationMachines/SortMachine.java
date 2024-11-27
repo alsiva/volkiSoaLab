@@ -68,7 +68,7 @@ public class SortMachine {
                     String secondDragonName = b.getName();
                     compareResult = genericCompare(firstDragonName, secondDragonName);
                     break;
-                case eyesCount:
+                case eyescount:
                     Long firstEyesCount = a.getHead().getEyesCount();
                     Long secondEyesCount = b.getHead().getEyesCount();
                     compareResult = genericCompare(firstEyesCount, secondEyesCount);
@@ -98,7 +98,7 @@ public class SortMachine {
                     CoordinatesDto secondCoordinates = b.getCoordinates();
                     compareResult = genericCompare(firstCoordinates, secondCoordinates);
                     break;
-                case creationDate:
+                case creationdate:
                     LocalDateTime firstCreationDate = a.getCreationDate();
                     LocalDateTime secondCreationDate = b.getCreationDate();
                     compareResult = genericCompare(firstCreationDate, secondCreationDate);

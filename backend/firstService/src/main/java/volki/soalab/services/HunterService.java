@@ -73,7 +73,7 @@ public class HunterService {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    public HunterDtoWithId addHunter(HunterDto hunterDto) {
+    public HunterDtoWithId addHunter(HunterDtoWithId hunterDto) {
 
         Long teamId = hunterDto.getTeamId();
         if (teamId == null) {

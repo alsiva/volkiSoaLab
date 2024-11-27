@@ -85,7 +85,7 @@ public class FilterMachine {
                     );
                 }
                 return genericMatcher(dragonAge, filterAge, operator);
-            case creationDate:
+            case creationdate:
                 LocalDateTime dragonCreationDate = dragonDtoWithId.getCreationDate();
                 if (dragonCreationDate == null) {
                     return false;
@@ -199,7 +199,7 @@ public class FilterMachine {
 
                 return genericMatcher(dragonIsSpeaking, filterIsSpeaking, operator);
 
-            case eyesCount:
+            case eyescount:
                 Long dragonEyesCount = dragonDtoWithId.getHead().getEyesCount();
                 long filterEyesCount;
                 try {

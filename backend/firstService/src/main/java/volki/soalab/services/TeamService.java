@@ -61,7 +61,7 @@ public class TeamService {
         return ResponseEntity.ok(teamDtoWithIdAndHunters);
     }
 
-    public ResponseEntity<TeamDtoWithId> addTeam(TeamDto teamDto) {
+    public ResponseEntity<TeamDtoWithId> addTeam(TeamDtoWithId teamDto) {
         TeamEntity teamEntity = teamRepository.save(new TeamEntity(teamDto));
         return ResponseEntity.ok(new TeamDtoWithId(teamEntity));
     }

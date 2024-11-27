@@ -50,7 +50,7 @@ public class HunterController {
     }
 
     @PostMapping(produces = "application/xml", consumes = "application/xml")
-    public HunterDtoWithId addHunter(@RequestBody @Valid HunterDto hunterDto) {
+    public HunterDtoWithId addHunter(@RequestBody @Valid HunterDtoWithId hunterDto) {
         return hunterService.addHunter(hunterDto);
     }
 }

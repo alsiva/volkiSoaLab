@@ -7,11 +7,11 @@ public enum DragonFields {
     name,
     age,
     coordinates,
-    creationDate,
+    creationdate,
     wingspan,
     speaking,
     color,
-    eyesCount;
+    eyescount;
 
     public static DragonFields fromString(String s) {
         try {
