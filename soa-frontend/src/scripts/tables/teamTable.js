@@ -33,6 +33,23 @@ class TeamTable {
         console.log(`Data from Url Service ${JSON.stringify(data)}`);
         return data;
     }
+
+    async update(teamJson) {
+        let url = this.urlService.getFindByIdUrl("teams", teamJson.id);
+        console.log(url);
+        let data;
+        let teamXml = convertJsonToXml({team: teamJson});
+        data = await this.urlService.updateItem(url, teamXml);
+        console.log(`Data from Url Service ${JSON.stringify(data)}`);
+        if(Object.keys(data).length == 0){
+            return {};
+        }
+        let updatedTeam = createTeamFromJsonObject(data);
+        console.log(`Обновлённая Команда: ${JSON.stringify(updatedTeam)}`);
+        return updatedTeam;
+    }
+
+
 }
 
 export {TeamTable};

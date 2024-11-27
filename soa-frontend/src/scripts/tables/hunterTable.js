@@ -34,6 +34,21 @@ class HunterTable {
         console.log(`Data from Url Service ${JSON.stringify(data)}`);
         return data;
     }
+
+    async update(hunterJson) {
+        let url = this.urlService.getFindByIdUrl("hunters", hunterJson.id);
+        console.log(url);
+        let data;
+        let hunterXml = convertJsonToXml({hunter: hunterJson});
+        data = await this.urlService.updateItem(url, hunterXml);
+        console.log(`Data from Url Service ${JSON.stringify(data)}`);
+        if(Object.keys(data).length == 0){
+            return {};
+        }
+        let updatedHunter = createHunterFromJsonObject(data);
+        console.log(`Обновлённый Охотник: ${JSON.stringify(updatedHunter)}`);
+        return updatedHunter;
+    }
 }
 
 export {HunterTable};

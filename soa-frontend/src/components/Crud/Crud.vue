@@ -75,7 +75,7 @@ watch(selected_collection, async (new_collection) => {
     if (new_collection === "dragons") {
         entity.value = new DragonTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterDragons);
-        curFields.value = fieldsToFilterDragons;
+        curFields.value = fieldsToCreateDragons;
     } else if(new_collection == "hunters"){
         entity.value = new HunterTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterHunters);
