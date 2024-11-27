@@ -57,8 +57,9 @@ const fieldsToFilterHunters = ["id", "name", "power"];
 const fieldsToFilterCurState = ref(createFiltersFromArray(fieldsToFilterDragons));
 // Создание новых сущностей
 const fieldsToCreateDragons = ["id", "name", "age", "coordinate_x", "coordinate_y", "creationdate", "wingspan", "speaking", "color", "eyes_count"]
-const fieldsToCreateTeams = ["id", "firstName", "lastName", "strength", "teamId"];
-const fieldsToCreateHunters = ["id", "name", "power"];
+const fieldsToCreateTeams = ["id", "name", "power"];
+const fieldsToCreateHunters = ["id", "firstName", "lastName", "strength", "teamId"];
+
 const curFields = ref(fieldsToCreateDragons);
 
 // Provided Values

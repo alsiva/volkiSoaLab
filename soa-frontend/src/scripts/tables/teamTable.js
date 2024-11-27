@@ -1,4 +1,5 @@
 import { createTeamFromJsonObject } from "../entities/team";
+import { convertJsonToXml } from "../utils";
 
 class TeamTable {
     columns = ['id', 'first_name', 'last_name', 'strength', 'team_id'];
@@ -21,6 +22,16 @@ class TeamTable {
             teams.push(createTeamFromJsonObject(d));
         }
         return teams;
+    }
+
+    async create(newTeam) {
+        let url = this.urlService.getCreateUrl("teams");
+        console.log(url);
+        let data;
+        let teamXml = convertJsonToXml({team: newTeam});
+        data = await this.urlService.createItem(url, teamXml);
+        console.log(`Data from Url Service ${JSON.stringify(data)}`);
+        return data;
     }
 }
 

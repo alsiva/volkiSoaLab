@@ -1,5 +1,7 @@
 import { createHunterFromJsonObject } from "../entities/hunter";
 
+import { convertJsonToXml } from "../utils";
+
 class HunterTable {
     columns = ['id', 'first_name', 'last_name', 'strength', 'team_id'];
     urlService;
@@ -21,6 +23,16 @@ class HunterTable {
             hunters.push(createHunterFromJsonObject(d));
         }
         return hunters;
+    }
+
+    async create(newHunter) {
+        let url = this.urlService.getCreateUrl("hunters");
+        console.log(url);
+        let data;
+        let hunterXml = convertJsonToXml({hunter: newHunter});
+        data = await this.urlService.createItem(url, hunterXml);
+        console.log(`Data from Url Service ${JSON.stringify(data)}`);
+        return data;
     }
 }
 
