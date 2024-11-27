@@ -49,6 +49,20 @@ class HunterTable {
         console.log(`Обновлённый Охотник: ${JSON.stringify(updatedHunter)}`);
         return updatedHunter;
     }
+
+    async delete(id) {
+        let url = this.urlService.getFindByIdUrl("hunters", id);
+        console.log(url);
+        let data;
+        data = await this.urlService.deleteItem(url);
+        console.log(`Data from Url Service ${JSON.stringify(data)}`);
+        if(Object.keys(data).length == 0){
+            return {};
+        }
+        let deletedHunter = createHunterFromJsonObject(data);
+        console.log(`Удалённый Охотник: ${JSON.stringify(deletedHunter)}`);
+        return deletedHunter;
+    }
 }
 
 export {HunterTable};

@@ -49,6 +49,20 @@ class TeamTable {
         return updatedTeam;
     }
 
+    async delete(id) {
+        let url = this.urlService.getFindByIdUrl("teams", id);
+        console.log(url);
+        let data;
+        data = await this.urlService.deleteItem(url);
+        console.log(`Data from Url Service ${JSON.stringify(data)}`);
+        if(Object.keys(data).length == 0){
+            return {};
+        }
+        let deletedTeam = createTeamFromJsonObject(data);
+        console.log(`Удалённая Команда: ${JSON.stringify(deletedTeam)}`);
+        return deletedTeam;
+    }
+
 
 }
 

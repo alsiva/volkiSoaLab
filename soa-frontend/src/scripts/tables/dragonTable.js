@@ -69,9 +69,6 @@ class DragonTable {
         let url = this.urlService.getFindByIdUrl("dragons", id);
         console.log(url);
         let data;
-        /*this.urlService.fetchXmlAsJson(url)
-        .then(jsonData => data = jsonData);
-        console.log(data);*/
         data = await this.urlService.deleteItem(url);
         console.log(`Data from Url Service ${JSON.stringify(data)}`);
         if(Object.keys(data).length == 0){
