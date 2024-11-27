@@ -9,18 +9,18 @@
         <h2>Настройка сортировки</h2>
         
         <!-- Таблица с фильтрами -->
-        <form @submit.prevent="applyFilters">
+        <form @submit.prevent="applySort">
           <table>
             <tbody>
-                <tr v-for="f in fieldsToSort">
+                <tr v-for="(f, index) in fieldsToSort">
                   <td>
-                    {{ f }}
+                    {{ f.fieldName }}
                   </td>
                   <td>
-                    <input type="radio" name="f" value="true">По возрастанию
+                    <input type="radio" :name="'sort-' + index" value="true" v-model="f.asc" @change="handleChange(true, index)">По возрастанию
                   </td>
                   <td>
-                    <input type="radio" name="f" value="false">По убыванию
+                    <input type="radio" :name="'sort-' + index" value="false" v-model="f.asc" @change="handleChange(false, index)">По убыванию
                   </td>
                 </tr>
             </tbody>
@@ -29,7 +29,7 @@
           <!-- Кнопки для применения и сброса фильтров -->
           <div class="buttons">
             <button type="submit">Применить</button>
-            <button type="button" @click="resetFilters">Сбросить</button>
+            <button type="button" @click="resetSorts">Сбросить</button>
           </div>
         </form>
 
@@ -41,22 +41,24 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
+import { Sort } from '@/scripts/dto/dto';
 
 
 const props = defineProps({
     fieldsToSort: Array
 })
 
+const emit = defineEmits(
+    ['sortString', 'clearSort']
+);
+
+const handleChange = (val, ind) => {
+  props.fieldsToSort[ind].asc = val;
+}
+
 // Состояние для модального окна
 const isModalOpen = ref(false);
-
-// Состояние для фильтров
-const filters = reactive({
-  name: '',
-  age: '',
-  email: ''
-});
 
 // Открытие модального окна
 const openModal = () => {
@@ -69,16 +71,20 @@ const closeModal = () => {
 };
 
 // Применение фильтров (в вашем случае можно отправить на сервер)
-const applyFilters = () => {
-  console.log('Фильтры применены:', filters);
+const applySort = () => {
+  //console.log('Сортировка применена', filters);
+  let sortString = Sort.createSortString(props.fieldsToSort);
+  console.log(`Sort string: ${sortString}`);
+  emit('sortString', sortString);
   closeModal();
 };
 
 // Сброс фильтров
-const resetFilters = () => {
-  filters.name = '';
-  filters.age = '';
-  filters.email = '';
+const resetSorts = () => {
+  for(const s of props.fieldsToSort){
+    s.asc = "";
+  }
+  emit('clearSort');
 };
 </script>
 

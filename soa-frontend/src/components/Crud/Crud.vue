@@ -2,7 +2,7 @@
     <div class="table-container">
         <div class="table-container__header">
             <CreateBtn :fields="curFields" :entity="entity"/>
-            <SortModal :fieldsToSort="fieldsToFilterCurState" />
+            <SortModal :fieldsToSort="sortFields" @sortString="createNewSort" @clearSort="clearSort"/>
             <FiltersModal :fieldsToFilter="fieldsToFilterCurState" @filterStrings="createNewFilter" @clearFilters="clearFilters"/>
             <Search @search="findEntity" :collection="selected_collection"/>
             <label for="collections">Выберите коллекцию:</label>
@@ -37,7 +37,7 @@ import {ref, watch, onMounted, provide} from "vue";
 
 import { DragonTable } from '@/scripts/tables/dragonTable';
 import { urlService } from '@/main';
-import { createFiltersFromArray, RequestAllDto } from '@/scripts/dto/dto';
+import { createFiltersFromArray, RequestAllDto, Sort } from '@/scripts/dto/dto';
 import { HunterTable } from '@/scripts/tables/hunterTable';
 import { TeamTable } from '@/scripts/tables/teamTable';
 
@@ -59,8 +59,9 @@ const fieldsToFilterCurState = ref(createFiltersFromArray(fieldsToFilterDragons)
 const fieldsToCreateDragons = ["id", "name", "age", "coordinate_x", "coordinate_y", "creationdate", "wingspan", "speaking", "color", "eyes_count"]
 const fieldsToCreateTeams = ["id", "name", "power"];
 const fieldsToCreateHunters = ["id", "firstName", "lastName", "strength", "teamId"];
-
 const curFields = ref(fieldsToCreateDragons);
+// Сортировка сущностей
+const sortFields = ref(Sort.sortsArrayFromStrArray(fieldsToCreateDragons));
 
 // Provided Values
 provide('entity', entity);
@@ -72,18 +73,23 @@ onMounted(() => {
 // Реакция на переключение коллекции
 watch(selected_collection, async (new_collection) => {
     reqDto.value.entityName = new_collection;
+    reqDto.value.filters = "";
+    reqDto.value.sort = "";
     if (new_collection === "dragons") {
         entity.value = new DragonTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterDragons);
         curFields.value = fieldsToCreateDragons;
+        sortFields.value = Sort.sortsArrayFromStrArray(fieldsToCreateDragons);
     } else if(new_collection == "hunters"){
         entity.value = new HunterTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterHunters);
         curFields.value = fieldsToCreateHunters;
+        sortFields.value = Sort.sortsArrayFromStrArray(fieldsToCreateHunters);
     } else if(new_collection == "teams"){
         entity.value = new TeamTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterTeams);
         curFields.value = fieldsToCreateTeams;
+        sortFields.value = Sort.sortsArrayFromStrArray(fieldsToCreateTeams);
     }else {
         alert("Нет такой коллекции!");
     }
@@ -114,6 +120,15 @@ const createNewFilter = (filterStrings) => {
 const clearFilters = () => {
     reqDto.value.filters="";
 }
+const createNewSort = (sortString) => {
+    reqDto.value.sort = sortString;
+}
+
+const clearSort = () => {
+    reqDto.value.sort = "";
+}
+
+
 
 const deleteItem = async (id) => {
     let res = await entity.value.delete(id);

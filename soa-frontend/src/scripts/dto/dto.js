@@ -50,6 +50,35 @@ function createFilterString(filter){
     return  filterString.substring(0, filterString.length-1);
 }
 
+class Sort {
+    constructor(fieldName, asc){
+        this.fieldName = fieldName;
+        this.asc = asc;
+    }
+
+    static sortsArrayFromStrArray(arr){
+        let listOfSortObj = [];
+        for(const a of arr){
+            listOfSortObj.push(new Sort(a, ""));
+        }
+        return listOfSortObj;
+    }
+    static createSortString(sortArr){
+        let sortStr = "";
+        for(let i = 0; i < sortArr.length; i++){
+            if(sortArr[i].asc === "") continue;
+            if(sortArr[i].asc){
+                sortStr += `sort=${sortArr[i].fieldName}`;
+            }else{
+                sortStr += `sort=-${sortArr[i].fieldName}`;
+            }
+            sortStr += "&";
+        }
+        return sortStr.slice(0, -1);
+    }
+}
 
 
-export {RequestAllDto, Filter, createFiltersFromArray, createFilterString};
+
+
+export {RequestAllDto, Sort, Filter, createFiltersFromArray, createFilterString};
