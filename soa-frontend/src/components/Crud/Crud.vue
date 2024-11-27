@@ -1,6 +1,7 @@
 <template>
     <div class="table-container">
         <div class="table-container__header">
+            <CreateBtn :fields="curFields" :entity="entity"/>
             <SortModal :fieldsToSort="fieldsToFilterCurState" />
             <FiltersModal :fieldsToFilter="fieldsToFilterCurState" @filterStrings="createNewFilter" @clearFilters="clearFilters"/>
             <Search @search="findEntity" :collection="selected_collection"/>
@@ -30,6 +31,7 @@ import SearchBtn from './SearchBtn.vue';
 import PageInput from './PageInput.vue';
 import FiltersModal from './FiltersModal.vue';
 import SortModal from './SortModal.vue';
+import CreateBtn from './CreateBtn.vue';
 
 import {ref, watch, onMounted, provide} from "vue";
 
@@ -52,8 +54,12 @@ const reqDto = ref(new RequestAllDto("dragons", "", "", 1, 5));
 const fieldsToFilterDragons = ["id", "name", "age", "coordinates", "creationdate", "wingspan", "speaking", "color", "eyescount"];
 const fieldsToFilterTeams = ["id", "firstName", "lastName", "strength", "teamId"];
 const fieldsToFilterHunters = ["id", "name", "power"];
-
 const fieldsToFilterCurState = ref(createFiltersFromArray(fieldsToFilterDragons));
+// Создание новых сущностей
+const fieldsToCreateDragons = ["id", "name", "age", "coordinate_x", "coordinate_y", "creationdate", "wingspan", "speaking", "color", "eyes_count"]
+const fieldsToCreateTeams = ["id", "firstName", "lastName", "strength", "teamId"];
+const fieldsToCreateHunters = ["id", "name", "power"];
+const curFields = ref(fieldsToCreateDragons);
 
 // Provided Values
 provide('entity', entity);
@@ -68,12 +74,15 @@ watch(selected_collection, async (new_collection) => {
     if (new_collection === "dragons") {
         entity.value = new DragonTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterDragons);
+        curFields.value = fieldsToFilterDragons;
     } else if(new_collection == "hunters"){
         entity.value = new HunterTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterHunters);
+        curFields.value = fieldsToCreateHunters;
     } else if(new_collection == "teams"){
         entity.value = new TeamTable(urlService);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterTeams);
+        curFields.value = fieldsToCreateTeams;
     }else {
         alert("Нет такой коллекции!");
     }

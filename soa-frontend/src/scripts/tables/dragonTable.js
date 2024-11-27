@@ -98,16 +98,11 @@ class DragonTable {
     }
 
     async create(newDragon) {
-        let url = this.urlService.getFindByIdUrl("dragons", id);
+        let url = this.urlService.getCreateUrl("dragons");
         console.log(url);
         let data;
-        /*this.urlService.fetchXmlAsJson(url)
-        .then(jsonData => data = jsonData);
-        console.log(data);*/
-        data = await this.urlService.fetchXmlAsJson(url);
-        if(Object.keys(data.dragonList).length == 0){
-            return [{}];
-        }
+        let dragonXml = convertJsonToXml(prepareJsonDragonXmlConversion(newDragon));
+        data = await this.urlService.createItem(url, dragonXml);
         console.log(`Data from Url Service ${data}`);
         let dragons = []
         for(const d of data.dragonList.children){

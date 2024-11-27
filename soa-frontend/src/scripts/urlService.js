@@ -38,6 +38,11 @@ class UrlService{
         return url;
     }
 
+    getCreateUrl(entityName){
+        let url = `${this.base_url}/${entityName}`;
+        return url;
+    }
+
     checkForErrorMessage(jsonData) {
         return null;
         /*return {
@@ -128,6 +133,35 @@ class UrlService{
 
             if (response.ok) {
             console.log('Элемент успешно удалён');
+            }        
+            if (!response.ok) {
+                let error = {};
+                rawJsonParser(convertXML(data), error)
+                console.log(error);
+                alert(`Ошибка!\nСтатус:${response.status}\nСообщение:${error.message}`);
+                return {};
+            }
+            return convertXML(data);
+        } catch (error) {
+            console.error('Произошла ошибка:', error);
+        }
+    }
+
+    async createItem(url, xmlContent) {
+        console.log(`Xml Content to send: ${xmlContent}`)
+        try {
+            const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/xml',
+                'Accept': 'application/xml'
+            },
+            body: xmlContent,
+            });
+            let data = await response.text();
+
+            if (response.ok) {
+            console.log('Элемент успешно создан');
             }        
             if (!response.ok) {
                 let error = {};
