@@ -53,7 +53,7 @@ public class DragonController {
         return ResponseEntity.ok(new Alsiva(22L, "alsiva"));
     }
 
-    @PutMapping(value = "{id}", produces = "application/xml")
+    @PutMapping(value = "/{id}", produces = "application/xml")
     public ResponseEntity<DragonDtoWithId> updateDragonById(@PathVariable long id, @Valid @RequestBody DragonDto dragonDto) {
         return dragonService.updateDragonById(id, dragonDto);
     }
@@ -81,8 +81,8 @@ public class DragonController {
     }
 
     @GetMapping(value = "/search/{substring}", produces = "application/xml")
-    public ResponseEntity<List<DragonDtoWithId>> getDragonsBySubName(@PathVariable String substring) {
-        List<DragonDtoWithId> dragonDtoWithIdList = dragonService.getDragonsWhereNameContains(substring);
+    public ResponseEntity<?> getDragonsBySubName(@PathVariable String substring) {
+        DragonDtoWithIdList dragonDtoWithIdList = dragonService.getDragonsWhereNameContains(substring);
         return ResponseEntity.ok(dragonDtoWithIdList);
     }
 

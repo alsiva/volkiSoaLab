@@ -97,11 +97,12 @@ public class DragonService {
         );
     }
 
-    public List<DragonDtoWithId> getDragonsWhereNameContains(String substring) {
-        return ((List<DragonEntity>) dragonRepository.findAll())
+    public DragonDtoWithIdList getDragonsWhereNameContains(String substring) {
+        List<DragonDtoWithId> dragons = ((List<DragonEntity>) dragonRepository.findAll())
                         .stream().map(DragonDtoWithId::new)
                         .filter(dragonDtoWithId -> dragonDtoWithId.getName().contains(substring))
                         .toList();
+        return new DragonDtoWithIdList(dragons);
     }
 
 

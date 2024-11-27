@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import volki.soalab.dto.team.TeamDto;
+import volki.soalab.dto.team.TeamDtoWithId;
 import volki.soalab.entities.hunter.HunterEntity;
 
 import java.util.ArrayList;
@@ -30,6 +31,13 @@ public class TeamEntity {
     private List<HunterEntity> hunterEntityList;
 
     public TeamEntity(TeamDto teamDto) {
+        this.name = teamDto.getName();
+        this.power = teamDto.getPower();
+        this.hunterEntityList = new ArrayList<>();
+    }
+
+    public TeamEntity(TeamDtoWithId teamDto) {
+        this.id = teamDto.getId();
         this.name = teamDto.getName();
         this.power = teamDto.getPower();
         this.hunterEntityList = new ArrayList<>();

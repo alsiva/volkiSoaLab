@@ -15,7 +15,7 @@ public class FilterAsString {
     private String value;
 
     public FilterAsString(String filterAsString) {
-        String filterRegex = "^([a-zA-Z_][a-zA-Z0-9_]*)-(eq|nq|gt|lt|gte|lte)-(.+)$";
+        String filterRegex = "^([a-zA-Z_][a-zA-Z0-9_]*)-(eq|nq|gt|lt|ge|le)-(.+)$";
         Pattern patter = Pattern.compile(filterRegex);
 
 
