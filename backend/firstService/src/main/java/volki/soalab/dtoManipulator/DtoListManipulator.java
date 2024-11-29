@@ -57,12 +57,15 @@ public class DtoListManipulator {
     }
 
     public <T> List<T> page(List<T> dtoList, Long page, Long pageSize) {
-        if (page < 1 || pageSize < 1) {
+        if (page < 0 || pageSize < 1) {
             throw new IllegalParamException("Page number and size should be more than or equal 1");
+        }
+        if(page == 0){
+            return dtoList;
         }
         return dtoList.stream()
                 .skip((page-1) * pageSize)
-                .limit(page)
+                .limit(pageSize)
                 .toList();
     }
 

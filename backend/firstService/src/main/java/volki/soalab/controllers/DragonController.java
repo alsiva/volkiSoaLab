@@ -81,8 +81,8 @@ public class DragonController {
     }
 
     @GetMapping(value = "/search/{substring}", produces = "application/xml")
-    public ResponseEntity<List<DragonDtoWithId>> getDragonsBySubName(@PathVariable String substring) {
-        List<DragonDtoWithId> dragonDtoWithIdList = dragonService.getDragonsWhereNameContains(substring);
+    public ResponseEntity<?> getDragonsBySubName(@PathVariable String substring) {
+        DragonDtoWithIdList dragonDtoWithIdList = dragonService.getDragonsWhereNameContains(substring);
         return ResponseEntity.ok(dragonDtoWithIdList);
     }
 

@@ -22,7 +22,7 @@ public class HunterDtoWithId extends HunterDto {
 
     @JacksonXmlProperty(localName = "id")
     @NotNull
-    @NotEmpty
+    //@NotEmpty
     @Setter
     private Long id;
     public HunterDtoWithId(HunterEntity hunterEntity) {
