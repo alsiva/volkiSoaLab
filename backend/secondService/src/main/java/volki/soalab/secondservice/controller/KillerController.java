@@ -13,6 +13,15 @@ import java.io.StringWriter;
 
 @Path("/killer")
 public class KillerController {
+
+
+    @GET
+    @Path("/pelmeni")
+    public Response positive() {
+        return Response.ok().build();
+    }
+
+
     @GET
     @Path("/dragon/find-by-cave-depth/{max-of-min}")
     public Response findByCaveDepth(@PathParam("max-of-min") String maxOrMin) {
