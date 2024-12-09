@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import volki.soalab.dto.dragon.DragonDto;
-import volki.soalab.dto.dragon.DragonDtoWithId;
 import volki.soalab.dto.dungeon.DungeonDto;
 import volki.soalab.dto.dungeon.DungeonDtoWithId;
 import volki.soalab.dto.dungeon.DungeonDtoWithIdList;
-import volki.soalab.entities.dragon.DragonEntity;
 import volki.soalab.entities.dungeon.DungeonEntity;
 import volki.soalab.repositories.DungeonRepository;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,5 +61,19 @@ public class DungeonService {
         dungeonEntity.updateByDungeonDto(dungeonDto);
         dungeonRepository.save(dungeonEntity);
         return ResponseEntity.ok(new DungeonDtoWithId(dungeonEntity));
+    }
+
+    public DungeonDtoWithId getMaxDungeon() {
+        List<DungeonEntity> dungeonEntityList = (List<DungeonEntity>) dungeonRepository.findAll();
+        dungeonEntityList.sort((a, b) -> (a.getSize() - b.getSize()) * -1);
+        DungeonEntity maxEntity = dungeonEntityList.get(0);
+        return new DungeonDtoWithId(maxEntity);
+    }
+
+    public DungeonDtoWithId getMinDungeon() {
+        List<DungeonEntity> dungeonEntityList = (List<DungeonEntity>) dungeonRepository.findAll();
+        dungeonEntityList.sort(Comparator.comparingInt(DungeonEntity::getSize));
+        DungeonEntity maxEntity = dungeonEntityList.get(0);
+        return new DungeonDtoWithId(maxEntity);
     }
 }

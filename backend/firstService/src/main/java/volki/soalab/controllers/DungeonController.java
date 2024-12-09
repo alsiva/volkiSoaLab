@@ -10,6 +10,9 @@ import volki.soalab.dto.dungeon.DungeonDtoWithId;
 import volki.soalab.dto.dungeon.DungeonDtoWithIdList;
 import volki.soalab.services.DungeonService;
 
+import java.util.Comparator;
+import java.util.List;
+
 @RestController
 @RequestMapping("/dungeons")
 @Validated
@@ -24,6 +27,16 @@ public class DungeonController {
     @GetMapping(produces = "application/xml")
     public DungeonDtoWithIdList getDungeons() {
         return dungeonService.getDungeons();
+    }
+
+    @GetMapping(value = "/max", produces = "application/xml")
+    public DungeonDtoWithId getMaxDungeon() {
+        return dungeonService.getMaxDungeon();
+    }
+
+    @GetMapping(value = "/min", produces = "application/xml")
+    public DungeonDtoWithId getMinDungeon() {
+        return dungeonService.getMinDungeon();
     }
 
     @GetMapping(value = "/{id}", produces = "application/xml")

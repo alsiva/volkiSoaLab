@@ -4,23 +4,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>volki.soalab</groupId>
+        <artifactId>parent-project</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <packaging>war</packaging>
 
-    <groupId>volki</groupId>
-    <artifactId>soaLab</artifactId>
+
+    <artifactId>firstService</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>soaLab</name>
-    <description>soaLab</description>
+    <name>firstService</name>
+    <description>firstService</description>
     <url/>
 
     <properties>
         <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <junit.version>5.7.2</junit.version> <!-- Укажи версию JUnit -->
     </properties>
 
     <dependencies>
@@ -45,6 +48,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
+            <version>3.4.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -52,11 +56,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <version>3.4.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.4.0</version>
         </dependency>
 
         <dependency>
@@ -69,11 +75,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+            <version>3.4.0</version>
         </dependency>
 
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -88,14 +96,17 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.15.0</version>
         </dependency>
 
         <!-- JBoss LogManager for logging in WildFly -->
@@ -114,31 +125,16 @@
         </dependency>
 
         <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>3.1.0</version> <!-- Укажите версию в зависимости от ваших требований -->
-            <scope>provided</scope> <!-- Указывает, что реализация будет предоставлена контейнером -->
+            <groupId>org.wildfly.plugins</groupId>
+            <artifactId>wildfly-maven-plugin</artifactId>
+            <version>5.0.1.Final</version>
         </dependency>
 
     </dependencies>
 
     <build>
-        <finalName>soaLab</finalName>
+        <finalName>firstService</finalName>
         <plugins>
-            <!-- Spring Boot Maven Plugin for packaging WAR file -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludeDevtools>true</excludeDevtools>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-            </plugin>
-
             <!-- Maven WAR Plugin for building WAR files for WildFly -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -146,6 +142,19 @@
                 <version>3.3.2</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml> <!-- WildFly не требует web.xml -->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version> <!-- укажите актуальную версию плагина -->
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg> <!-- Включение флага -parameters -->
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
