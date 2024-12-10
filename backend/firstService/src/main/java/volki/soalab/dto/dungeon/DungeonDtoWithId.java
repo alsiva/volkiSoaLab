@@ -18,6 +18,8 @@ public class DungeonDtoWithId extends DungeonDto{
     @Min(value = 1, message = "Id must be greater than 0")
     @JacksonXmlProperty(localName = "id")
     private Long id;
+
+
     public DungeonDtoWithId(DungeonEntity dungeonEntity) {
         super(dungeonEntity);
         this.id = dungeonEntity.getId();

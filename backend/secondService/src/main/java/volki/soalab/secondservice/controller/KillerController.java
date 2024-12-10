@@ -6,10 +6,10 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import volki.soalab.secondservice.DungeonDto.DungeonDtoWithIdList;
+import volki.soalab.secondservice.DragonDto.DragonDto;
+import volki.soalab.secondservice.DungeonDto.DungeonDto;
+import volki.soalab.secondservice.DungeonDto.DungeonDtoList;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 @Path("/killer")
 public class KillerController {
@@ -27,37 +27,58 @@ public class KillerController {
     public Response findByCaveDepth(@PathParam("max-of-min") String maxOrMin) {
         boolean max = maxOrMin.equalsIgnoreCase("max");
 
-        Client client = ClientBuilder.newBuilder()
+        // Создание клиента в блоке try-with-resources для автоматического закрытия
+        try (Client client = ClientBuilder.newBuilder()
                 .property("jersey.config.client.connectTimeout", 5000)  // Таймаут на подключение
                 .property("jersey.config.client.readTimeout", 10000)   // Таймаут на чтение
-                .build();
+                .build()) {
 
-        WebTarget target = client.target("http://localhost:8080/firstService/dungeons");
+            WebTarget target = client.target("http://localhost:8080/firstService/dungeons");
 
-        try {
+            // Отправка первого запроса
             Response response = target.request(MediaType.APPLICATION_XML).get();
 
             if (response.getStatus() == 200) {
-                DungeonDtoWithIdList responseBody = response.readEntity(DungeonDtoWithIdList.class);
-                return Response.ok(responseBody).build();
+                DungeonDtoList responseBody = response.readEntity(DungeonDtoList.class);
+                if (responseBody.getDungeonDtoList().isEmpty()) {
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+                DungeonDto toFind = responseBody.toFind(max);
+                if (toFind == null) {
+                    return Response.status(Response.Status.NO_CONTENT).build();
+                }
+
+                // Новый запрос для поиска дракона (например, с использованием найденной пещеры)
+                WebTarget dragonTarget = client.target("http://localhost:8080/firstService/dragons/" + toFind.getDragonId());
+                Response dragonResponse = dragonTarget.request(MediaType.APPLICATION_XML).get();
+
+                if (dragonResponse.getStatus() == 200) {
+                    // Обработка ответа от сервера дракона
+                    DragonDto dragonDto = dragonResponse.readEntity(DragonDto.class);
+                    return Response.ok(dragonDto).build();
+                } else {
+                    return Response.status(dragonResponse.getStatus())
+                            .entity("Error fetching dragon details: " + dragonResponse.getStatus())
+                            .build();
+                }
+
             } else {
                 System.out.println("Error: Response code " + response.getStatus());
-                return Response.status(response.getStatus()).entity("Error: " + response.getStatus()).build();
+
+                // Получаем тело ответа, если оно есть (например, текст ошибки)
+                String errorMessage = response.readEntity(String.class);
+                System.out.println("Error message: " + errorMessage);
+
+                // Возвращаем ответ с ошибкой и подробной информацией
+                return Response.status(response.getStatus())
+                        .entity("Error: " + response.getStatus() + ", Message: " + errorMessage)
+                        .build();
             }
-        } catch (ProcessingException e) {
-            e.printStackTrace(); // Вывод стека в консоль
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-
-            // Включаем стек исключений в тело ответа
+        } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Error occurred: " + e.getMessage() + "\n" + sw.toString())
+                    .entity("Error during request processing: " + e.getMessage())
                     .build();
-        } finally {
-            client.close(); // Закрываем клиент
         }
-
     }
 
     @GET

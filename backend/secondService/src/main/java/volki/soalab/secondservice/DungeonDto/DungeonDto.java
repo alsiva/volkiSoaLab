@@ -11,13 +11,16 @@ import lombok.NoArgsConstructor;
 @XmlRootElement(name = "dungeon")
 @NoArgsConstructor
 @Data
-@XmlType(propOrder = {"id", "size"})
+@XmlType(propOrder = {"id", "size", "dragonId"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DungeonDto {
 
     @Min(value = 1, message = "Id must be greater than 0")
     @XmlElement(name = "id")
     private Long id;
+
+    @XmlElement(name = "dragonId")
+    private Long dragonId;
 
     @NotNull(message = "Field cannot be null")
     @Min(value = 1, message = "Value must be greater than or equal to 1")

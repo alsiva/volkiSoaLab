@@ -18,10 +18,14 @@ public class DungeonDto {
     @JacksonXmlProperty(localName = "size")
     private Integer size;
 
+    @JacksonXmlProperty(localName = "dragonId")
+    private Long dragonId;
+
     public DungeonDto(DungeonEntity dungeonEntity) {
         if (dungeonEntity.getSize() <= 0) {
             throw new IllegalParamException("Cave size should be more than 0");
         }
         this.size = dungeonEntity.getSize();
+        this.dragonId = dungeonEntity.getDragonId();
     }
 }

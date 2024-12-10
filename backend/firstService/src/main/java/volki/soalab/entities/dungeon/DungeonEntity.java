@@ -17,6 +17,9 @@ public class DungeonEntity {
     @Column(name = "size")
     private int size; //Значение поля должно быть больше 0
 
+    @Column(name = "dragon_id")
+    private Long dragonId;
+
     public void updateByDungeonDto(DungeonDto dungeonDto) {
         this.size = dungeonDto.getSize();
     }
