@@ -102,10 +102,7 @@ class DragonTable {
         data = await this.urlService.createItem(url, dragonXml);
         console.log(`Data from Url Service ${data}`);
         let dragons = []
-        for(const d of data.dragonList.children){
-            dragons.push(createDragonFromJsonObject(d));
-        }
-        return dragons;
+        return createDragonFromJsonObject(data);
     }
 }
 

@@ -56,7 +56,16 @@ class UrlService{
     async fetchXmlAsJson(url) {
         try {
             // Выполняем GET-запрос
-            const response = await fetch(encodeURI(url));
+            const response = await fetch(encodeURI(url), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/xml',
+                    'Accept': 'application/xml',
+                    'Access-Control-Request-Method': 'GET',
+                    'Access-Control-Request-Headers': 'Content-Type, Authorization'
+
+                }
+            });
 
             // Проверяем, успешен ли запрос
             if (!response.ok) {

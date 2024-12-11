@@ -22,7 +22,7 @@
 <script setup>
 import SearchBtnSendTeam from './SearchBtnSendTeam.vue';
 
-import { urlService } from '@/main';
+import { urlService, urlServiceSecond,  } from '@/main';
 
 import {ref} from 'vue';
 

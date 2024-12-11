@@ -28,7 +28,7 @@ import {ref} from 'vue';
 const dragonData = ref([]);
 const minMaxRadioState = ref("");
 
-const columns = ["id", "name", "age", "coordinate_x", "coordinate_y", "creationdate", "wingspan", "speaking", "color", "eyes_count"]
+const columns = ["id", "name", "age", "coordinate_x", "coordinate_y", "creation_date", "wingspan", "speaking", "color", "eyes_count"]
 
 // Обработчики
 const switchRadioState = (newState) => {

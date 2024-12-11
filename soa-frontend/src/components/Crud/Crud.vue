@@ -36,7 +36,7 @@ import CreateBtn from './CreateBtn.vue';
 import {ref, watch, onMounted, provide} from "vue";
 
 import { DragonTable } from '@/scripts/tables/dragonTable';
-import { urlService } from '@/main';
+import { urlService, urlServiceFirst } from '@/main';
 import { createFiltersFromArray, RequestAllDto, Sort } from '@/scripts/dto/dto';
 import { HunterTable } from '@/scripts/tables/hunterTable';
 import { TeamTable } from '@/scripts/tables/teamTable';
@@ -45,7 +45,7 @@ import { TeamTable } from '@/scripts/tables/teamTable';
 const selected_collection = ref('dragons');
 const entityColumns = ref([]);
 const entityData = ref([]);
-const entity = ref(new DragonTable(urlService));
+const entity = ref(new DragonTable(urlServiceFirst));
 // Состояние запроса
 const reqDto = ref(new RequestAllDto("dragons", "", "", 1, 5));
 
@@ -76,17 +76,17 @@ watch(selected_collection, async (new_collection) => {
     reqDto.value.filters = "";
     reqDto.value.sort = "";
     if (new_collection === "dragons") {
-        entity.value = new DragonTable(urlService);
+        entity.value = new DragonTable(urlServiceFirst);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterDragons);
         curFields.value = fieldsToCreateDragons;
         sortFields.value = Sort.sortsArrayFromStrArray(fieldsToCreateDragons);
     } else if(new_collection == "hunters"){
-        entity.value = new HunterTable(urlService);
+        entity.value = new HunterTable(urlServiceFirst);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterHunters);
         curFields.value = fieldsToCreateHunters;
         sortFields.value = Sort.sortsArrayFromStrArray(fieldsToCreateHunters);
     } else if(new_collection == "teams"){
-        entity.value = new TeamTable(urlService);
+        entity.value = new TeamTable(urlServiceFirst);
         fieldsToFilterCurState.value = createFiltersFromArray(fieldsToFilterTeams);
         curFields.value = fieldsToCreateTeams;
         sortFields.value = Sort.sortsArrayFromStrArray(fieldsToCreateTeams);
