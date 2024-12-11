@@ -75,8 +75,9 @@ public class DragonEntity {
         if (dragonDto.getWingspan() != null) {
             this.wingspan = dragonDto.getWingspan();
         }
-        this.speaking = dragonDto.getSpeaking();
-
+        if (dragonDto.getSpeaking() != null) {
+            this.speaking = dragonDto.getSpeaking();
+        }
         if (dragonDto.getColor() != null) {
             this.colorEntity.updateByDto(dragonDto.getColor());
         }

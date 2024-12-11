@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import volki.soalab.ValidEnum;
 import volki.soalab.entities.dragon.DragonEntity;
 
 import java.time.LocalDateTime;
@@ -50,6 +51,7 @@ public class DragonDto {
     // color не может быть null
     @NotNull(message = "Color cannot be null")
     @JacksonXmlProperty(localName = "color")
+    @ValidEnum(message = "Color must be one of the predefined values in ColorDto")
     private ColorDto color;
 
     // head (без дополнительных ограничений)

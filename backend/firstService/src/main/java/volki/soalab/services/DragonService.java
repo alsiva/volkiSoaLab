@@ -73,7 +73,7 @@ public class DragonService {
     public DragonCountDto getDragonCountByEyesCount(long eyesCount) {
         return new DragonCountDto(
                 ((List<DragonEntity>) dragonRepository.findAll())
-                        .stream().filter(dragonEntity -> dragonEntity.getHead().getEyesCount() == eyesCount)
+                        .stream().filter(dragonEntity -> dragonEntity.getHead() != null && dragonEntity.getHead().getEyesCount() == eyesCount)
                         .count()
         );
     }

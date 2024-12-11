@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import volki.soalab.dto.dungeon.DungeonDtoWithId;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ import java.util.List;
 public class DragonDtoWithIdList {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "dragon") // Задайте имя для элементов списка
-    private List<DragonDtoWithId> dragonDtoWithId;
+    private List<DragonDtoWithId> dragonDtoWithIdList;
 }
