@@ -12,6 +12,9 @@ import Killer from '@/components/Killer/Killer.vue';
 
 <style>
 .content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
     width: 70%;
     margin: 0 auto;
 }
