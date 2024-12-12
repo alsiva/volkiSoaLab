@@ -23,7 +23,6 @@ public class CoordinatesDto implements Comparable<CoordinatesDto> {
 
     @Max(value = 411, message = "x must be lower or equal than 411")
     @NotNull(message = "x cannot be null")
-    @NotEmpty(message = "x cannot be empty")
     @JacksonXmlProperty(localName = "x")
     private Double x; // Максимальное значение поля: 411, Поле не может быть null
 

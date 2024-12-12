@@ -2,8 +2,10 @@ package volki.soalab.controllers;
 
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import volki.soalab.dto.dragon.*;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/dragons")
 @Validated
+@Slf4j
 public class DragonController {
 
     private final DragonService dragonService;

@@ -3,12 +3,12 @@ package volki.soalab.dto.dragon;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import volki.soalab.ValidEnum;
 import volki.soalab.entities.dragon.DragonEntity;
 
 import java.time.LocalDateTime;
@@ -27,6 +27,7 @@ public class DragonDto {
     // coordinates не может быть null
     @NotNull(message = "Coordinates cannot be null")
     @JacksonXmlProperty(localName = "coordinates")
+    @Valid
     private CoordinatesDto coordinates;
 
     // creationDate генерируется автоматически, не может быть null
@@ -51,7 +52,6 @@ public class DragonDto {
     // color не может быть null
     @NotNull(message = "Color cannot be null")
     @JacksonXmlProperty(localName = "color")
-    @ValidEnum(message = "Color must be one of the predefined values in ColorDto")
     private ColorDto color;
 
     // head (без дополнительных ограничений)
@@ -75,5 +75,4 @@ public class DragonDto {
         }
 
     }
-
 }

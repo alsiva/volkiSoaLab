@@ -1,5 +1,8 @@
 package volki.soalab;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import jakarta.ws.rs.Produces;
 import jakarta.xml.bind.JAXBException;
 import org.springframework.http.HttpStatus;
@@ -60,5 +63,4 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse("Validation error", details.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-
 }

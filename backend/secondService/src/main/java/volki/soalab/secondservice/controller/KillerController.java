@@ -90,7 +90,58 @@ public class KillerController {
     @Path("/team/{team-id}/move-to-cave/{cave-id}")
     public Response moveToCave(@PathParam("team-id") Long teamId,
                                @PathParam("cave-id") Long caveId) {
-        return Response.ok()
-                .build();
+        // Создание клиента в блоке try-with-resources для автоматического закрытия
+        try (Client client = ClientBuilder.newBuilder()
+                .property("jersey.config.client.connectTimeout", 5000)  // Таймаут на подключение
+                .property("jersey.config.client.readTimeout", 10000)   // Таймаут на чтение
+                .build()) {
+
+            WebTarget target = client.target("http://localhost:8080/firstService/teams/" + teamId);
+
+            // Отправка первого запроса
+            Response response = target.request(MediaType.APPLICATION_XML).get();
+
+            if (response.getStatus() != 200) {
+                System.out.println("Error: Response code " + response.getStatus());
+
+                // Получаем тело ответа, если оно есть (например, текст ошибки)
+                String errorMessage = response.readEntity(String.class);
+                System.out.println("Error message: " + errorMessage);
+
+                // Возвращаем ответ с ошибкой и подробной информацией
+                return Response.status(response.getStatus())
+                        .entity("Error: " + response.getStatus() + ", Message: " + errorMessage)
+                        .build();
+            }
+
+            // Новый запрос для поиска дракона
+            WebTarget dungeonTarget = client.target("http://localhost:8080/firstService/dungeons/" + caveId);
+            Response dungeonResponse = dungeonTarget.request(MediaType.APPLICATION_XML).get();
+
+            if (dungeonResponse.getStatus() != 200) {
+                return Response.status(dungeonResponse.getStatus())
+                        .entity("Error fetching dungeon details: " + dungeonResponse.getStatus())
+                        .build();
+            }
+
+
+            Long dragonId = dungeonResponse.readEntity(DungeonDto.class).getDragonId();
+            WebTarget dragonTarget = client.target("http://localhost:8080/firstService/dragons/" + dragonId);
+            try (Response dragonResponse = dragonTarget.request(MediaType.APPLICATION_XML).delete()) {
+                if (dragonResponse.getStatus() != 200) {
+                    return Response.status(dragonResponse.getStatus())
+                            .entity("Error deleting dragon details: " + dragonResponse.getStatus())
+                            .build();
+                }
+            }
+
+            return Response.ok().build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error during request processing: " + e.getMessage())
+                    .build();
+        }
+
     }
 }
